@@ -357,11 +357,12 @@ instance Function OrdB where
 instance Function OrdC where
   function = functionMap unOrdC OrdC
 
--- instance Arbitrary
-
 instance (Function a, CoArbitrary a, Arbitrary b) => Arbitrary (a:->b) where
   arbitrary = function `fmap` arbitrary
   shrink    = shrinkFun shrink
+
+instance (Arbitrary a, CoArbitrary b) => CoArbitrary (Fun a b) where
+  coarbitrary fn = coarbitrary (apply fn)
 
 --------------------------------------------------------------------------
 -- generic function instances
